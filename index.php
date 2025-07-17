@@ -13,7 +13,7 @@ $projects = $conn->query("SELECT * FROM projects ORDER BY created_at DESC");
                 <h2 class="text-2xl font-bold text-yellow-300 mb-2"><?php echo htmlspecialchars($project['name']); ?></h2>
                 <p class="text-gray-400 mb-4"><?php echo nl2br(htmlspecialchars($project['description'])); ?></p>
                 <div class="mt-4">
-                    <a href="view_project.php?id=<?php echo $project['id']; ?>" class="inline-block bg-yellow-500 hover:bg-yellow-400 text-yellow-900 font-bold py-2 px-4 rounded transition duration-300">查看详情 & 提交日志</a>
+                    <a href="view_project_new.php?id=<?php echo $project['id']; ?>" class="inline-block bg-yellow-500 hover:bg-yellow-400 text-yellow-900 font-bold py-2 px-4 rounded transition duration-300">查看详情 & 提交日志</a>
                 </div>
             </div>
         <?php endwhile; ?>

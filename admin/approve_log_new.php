@@ -9,7 +9,7 @@ $log_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $project_id = isset($_GET['project_id']) ? (int)$_GET['project_id'] : 0;
 
 if ($log_id > 0) {
-    $stmt = $conn->prepare("UPDATE work_logs SET status = 'approved' WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE work_logs_new SET status = 'approved' WHERE id = ?");
     $stmt->bind_param("i", $log_id);
     $stmt->execute();
     $stmt->close();
@@ -17,7 +17,7 @@ if ($log_id > 0) {
 
 // 跳转回审核页面
 if ($project_id > 0) {
-    header("Location: view_project.php?id=" . $project_id);
+    header("Location: view_project_new.php?id=" . $project_id);
 } else {
     header("Location: index.php");
 }

@@ -34,7 +34,7 @@ check_admin('../index.php');
                     if ($pending_count > 0) {
                         echo '<span class="mr-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-red-800 text-red-200">' . $pending_count . '条待审核</span>';
                     }
-                    echo '<a href="view_project.php?id=' . $project['id'] . '" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-1 px-3 rounded text-sm transition duration-300">查看/审核</a>';
+                    echo '<a href="view_project_new.php?id=' . $project['id'] . '" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-1 px-3 rounded text-sm transition duration-300">查看/审核</a>';
                     echo '</div>';
                     echo '</li>';
                 }
