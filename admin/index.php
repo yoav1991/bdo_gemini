@@ -22,7 +22,7 @@ check_admin('../index.php');
             if ($projects->num_rows > 0) {
                 while($project = $projects->fetch_assoc()) {
                     // 获取待审核数量
-                    $stmt = $conn->prepare("SELECT COUNT(*) as pending_count FROM work_logs WHERE project_id = ? AND status = 'pending'");
+                    $stmt = $conn->prepare("SELECT COUNT(*) as pending_count FROM work_logs_new WHERE project_id = ? AND status = 'pending'");
                     $stmt->bind_param("i", $project['id']);
                     $stmt->execute();
                     $pending_count = $stmt->get_result()->fetch_assoc()['pending_count'];

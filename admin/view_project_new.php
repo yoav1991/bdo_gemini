@@ -66,36 +66,46 @@ while ($row = $result->fetch_assoc()) {
 }
 ?>
 
-<!-- 添加图片预览样式 -->
 <style>
-.image-preview {
-    position: relative;
-    display: inline-block;
-}
-
-.image-preview img {
+.image-thumb {
+    cursor: pointer;
     transition: transform 0.2s ease;
+    border: 2px solid #4B5563; /* border-gray-600 */
 }
 
-.image-preview:hover img {
+.image-thumb:hover {
     transform: scale(1.05);
+    border-color: #FACC15; /* border-yellow-400 */
 }
 
-.image-tooltip {
-    display: none;
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    margin-bottom: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+/* 全局图片预览容器样式 */
+.fullscreen-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+    visibility: hidden; /* 默认隐藏 */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.fullscreen-preview.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.fullscreen-preview img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
     border-radius: 8px;
-    overflow: hidden;
-}
-
-.image-preview:hover .image-tooltip {
-    display: block;
 }
 </style>
 
@@ -155,6 +165,31 @@ while ($row = $result->fetch_assoc()) {
                                     <?php endforeach; ?>
                                 </div>
                             </td>
+                            <td class="px-4 py-3">
+                                <div class="flex flex-wrap gap-2">
+                                    <?php foreach ($log['images'] as $index => $image): ?>
+                                        <img src="/uploads/<?php echo htmlspecialchars($image); ?>" 
+                                            alt="截图<?php echo $index + 1; ?>" 
+                                            class="w-16 h-16 object-cover rounded image-thumb"
+                                            onclick="openImagePreview('/uploads/<?php echo htmlspecialchars($image); ?>')">
+                                    <?php endforeach; ?>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap text-yellow-400 font-bold">
+                                <?php echo format_silver($log['total_amount']); ?>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <?php if ($log['status'] == 'pending'): ?>
+                                    <a href="approve_log_new.php?id=<?php echo $log['log_id']; ?>&project_id=<?php echo $project_id; ?>" 
+                                        class="px-3 py-1 text-sm font-semibold rounded-full bg-gray-600 hover:bg-gray-500 text-white">
+                                        等待审核
+                                    </a>
+                                <?php else: ?>
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 text-green-200">
+                                        已审核
+                                    </span>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -165,4 +200,26 @@ while ($row = $result->fetch_assoc()) {
 <?php endif; ?>
 </div>
 
+<div id="image-preview-modal" class="fullscreen-preview" onclick="closeImagePreview()">
+    <img id="preview-image" src="" alt="Full-screen preview" onclick="event.stopPropagation()">
+</div>
+
 <?php require_once '../templates/footer.php'; ?>
+
+<script>
+    function openImagePreview(imageSrc) {
+        const modal = document.getElementById('image-preview-modal');
+        const previewImg = document.getElementById('preview-image');
+        previewImg.src = imageSrc;
+        modal.classList.add('show');
+    }
+
+    function closeImagePreview() {
+        const modal = document.getElementById('image-preview-modal');
+        modal.classList.remove('show');
+        // 可选：清除图片 src 以节省内存
+        // setTimeout(() => {
+        //     document.getElementById('preview-image').src = '';
+        // }, 300);
+    }
+</script>
